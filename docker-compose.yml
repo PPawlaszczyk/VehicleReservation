@@ -1,0 +1,75 @@
+﻿version: '3.8'
+services:
+  rabbitmq:
+    container_name: "rabbitmq"
+    hostname: "rabbitmq"
+    image: rabbitmq:3.8-management-alpine
+    environment:
+       - RABBITMQ_DEFAULT_USER=user
+       - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+       # RabbitMq instance
+       - '5672:5672'
+       # Web interface
+       - '15672:15672'   
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 2
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: db
+    environment:
+      SA_PASSWORD: "P@ss_w0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "14335:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -U sa -P "P@ss_w0rd" -C -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 50s
+      retries: 2
+
+  dotnet-app:
+    container_name: dotnet-app
+    build:
+      context: ./VehicleReservationAPI
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: Server=db,1433;Database=master;User Id=sa;Password=P@ss_w0rd;MultipleActiveResultSets=true;Integrated Security=false;TrustServerCertificate=true
+    ports:
+      - "5000:5000"
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail http://localhost:5000/healthz || exit 1"
+      interval: 20s
+      timeout: 50s
+      retries: 5
+
+  console-app:
+    container_name: console-app
+    build:
+      context: ./VehicleReservationConsole
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      dotnet-app:
+        condition: service_healthy   
+             
+volumes:
+  mssql-data:
+    driver: local

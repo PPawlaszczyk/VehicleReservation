@@ -1,0 +1,17 @@
+[
+  {
+    "UserName": "Pawel",
+    "Email": "pawel@example.com",
+    "Created": "2020-06-24"
+  },
+  {
+    "UserName": "MyszkaMiki",
+    "Email": "myszkamiki@example.com",
+    "Created": "2019-12-09"
+  },
+  {
+    "UserName": "Cohelo",
+    "Email": "cohelo@example.com",
+    "Created": "2019-08-10"
+  }
+]

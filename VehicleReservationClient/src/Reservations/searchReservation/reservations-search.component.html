@@ -1,0 +1,65 @@
+<div class="container mt-5">
+  <!-- Form Section -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="card-title mb-4">Find Available Vehicles</h2>
+      <form #form="ngForm" (ngSubmit)="getAvailableReservations()" class="row g-3">
+        <!-- Start Date -->
+        <div class="col-md-3">
+          <label for="startDate" class="form-label">Start Date</label>
+          <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="startDate">
+        </div>
+
+        <!-- End Date -->
+        <div class="col-md-3">
+          <label for="endDate" class="form-label">End Date</label>
+          <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="endDate">
+        </div>
+
+        <!-- Vehicle Type -->
+        <div class="col-md-3">
+          <label for="vehicleType" class="form-label">Vehicle Type</label>
+          <select class="form-select" id="vehicleType" name="vehicleType" [(ngModel)]="selectedVehicleType">
+            @for(type of vehicleTypes; track type) {
+              <option [value]="type">{{ type }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary me-2 flex-grow-1">Apply Filters</button>
+          <button type="button" (click)="resetFilters()" class="btn btn-outline-secondary flex-grow-1">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Vehicle List Section -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title mb-4">Available Vehicles</h2>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @for(vehicle of availableVehicles; track vehicle.name) {
+          <div class="col">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">{{ vehicle.name }}</h5>
+                <ul class="list-unstyled">
+                  <li><strong>Mark:</strong> {{ vehicle.mark }}</li>
+                  <li><strong>Seats:</strong> {{ vehicle.seats }}</li>
+                  <li><strong>Fuel:</strong> {{ vehicle.fuel }}</li>
+                  <li><strong>Year:</strong> {{ vehicle.year }}</li>
+                  <li><strong>Cost:</strong> ${{ vehicle.cost }}</li>
+                </ul>
+              </div>
+              <div class="card-footer bg-transparent border-top-0">
+                <button class="btn btn-outline-primary w-100" disabled (click)="bookVehicle(vehicle.vehicleId)">Book Now - disabled</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

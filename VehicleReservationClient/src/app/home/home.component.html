@@ -1,0 +1,21 @@
+<div class="container mt-5"></div>
+<div style="text-align: center;">
+    @if(!accountService.currentUser()){
+    @if(!registerMode){
+    <h1>Book your vehicle</h1>
+    <p class="lead">Come on in to view your reservations... all you need to do is sign up!</p>
+    <div class="text-center">
+        <button (click) = "registerToggle()" class="btn btn-primary btn-lg me-2">Register</button>
+    </div>
+    }
+    @else{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
+            </div>
+        </div>
+    </div>
+    }
+    }
+</div>

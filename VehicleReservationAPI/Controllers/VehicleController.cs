@@ -1,0 +1,38 @@
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using VehicleReservationAPI.CQRS.Vehicles.Commands;
+using VehicleReservationAPI.CQRS.Vehicles.Queries;
+using VehicleReservationAPI.Enums;
+
+namespace VehicleReservationAPI.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class VehicleController(IMediator mediator) : ControllerBase
+    {
+        [HttpGet("get-available-vehicles")]
+        public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> GetAvailableVehicles(DateOnly startDate, DateOnly endDate, VehicleType type)
+        {
+            return Ok(await mediator.Send(new GetAvailableVehicleQuery
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                Type = type
+            }));
+        }
+
+        [HttpGet("get-vehicle-details")]
+        public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> GetVehicleDetails(Guid VehicleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPost("create-vehicle")]
+        public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> CreateVehicle([FromBody] CreateVehicleCommand vehicle)
+        {
+            return Ok(await mediator.Send(vehicle));
+        }
+    }
+}
