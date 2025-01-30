@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using VehicleReservationAPI.Data;
 using VehicleReservationAPI.Entities;
 using VehicleReservationAPI.Extensions;
+using VehicleReservationAPI.Interfaces;
 using VehicleReservationAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,13 +51,15 @@ using var scope = app.Services.CreateScope();
         var context = services.GetRequiredService<DataContext>();
         var userManager = services.GetRequiredService<UserManager<AppUser>>();
         var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+        var unitofWork = services.GetRequiredService<IUnitOfWork>();
+
         await context.Database.MigrateAsync();
 
-        await Seed.SeedUsers(userManager, roleManager);
+        await Seed.SeedUsers(unitofWork, userManager, roleManager);
         await context.SaveChangesAsync();
 
     }
-    catch (System.Exception ex)
+    catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occured during migration");
