@@ -28,21 +28,5 @@ namespace VehicleReservationAPI.Controllers
             await mediator.Send(reservation);
             return Ok();
         }
-
-        [Authorize]
-        [HttpPut("update-reserved-vehicle")]
-        public async Task<ActionResult> UpdateReservedVehicle([FromBody] ReturnReservedVehicleCommand reservation)
-        {
-            throw new NotImplementedException();
-
-        }
-
-        [Authorize]
-        [HttpPost("Cancel-reserved-vehicle")]
-        public async Task<ActionResult> CancelReservedVehicle([FromBody] ReturnReservedVehicleCommand reservation)
-        {
-            throw new NotImplementedException();
-
-        }
     }
 }

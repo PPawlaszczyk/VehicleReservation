@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Identity.Client;
-using VehicleReservationAPI.DTOs;
 using VehicleReservationAPI.Extensions;
 using VehicleReservationAPI.Interfaces;
 using VehicleReservationAPI.Validators;

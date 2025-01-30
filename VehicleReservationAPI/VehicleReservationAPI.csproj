@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Reservations\Queries\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
