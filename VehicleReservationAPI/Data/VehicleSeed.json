@@ -1,0 +1,92 @@
+[
+  {
+    "Name": "Toyota Corolla",
+    "Type": 1,
+    "Mark": "Toyota",
+    "Seats": 5,
+    "Fuel": "Petrol",
+    "Year": 2022,
+    "Cost": 50,
+    "RegistrationNumber": "CAR1234"
+  },
+  {
+    "Name": "Honda Civic",
+    "Type": 1,
+    "Mark": "Honda",
+    "Seats": 5,
+    "Fuel": "Hybrid",
+    "Year": 2023,
+    "Cost": 55,
+    "RegistrationNumber": "CAR5678"
+  },
+  {
+    "Name": "Ford Focus",
+    "Type": 1,
+    "Mark": "Ford",
+    "Seats": 5,
+    "Fuel": "Diesel",
+    "Year": 2021,
+    "Cost": 45,
+    "RegistrationNumber": "CAR9012"
+  },
+  {
+    "Name": "Yamaha R1",
+    "Type": 3,
+    "Mark": "Yamaha",
+    "Seats": 2,
+    "Fuel": "Petrol",
+    "Year": 2022,
+    "Cost": 30,
+    "RegistrationNumber": "MOTO1234"
+  },
+  {
+    "Name": "Ducati Panigale",
+    "Type": 3,
+    "Mark": "Ducati",
+    "Seats": 2,
+    "Fuel": "Petrol",
+    "Year": 2023,
+    "Cost": 40,
+    "RegistrationNumber": "MOTO5678"
+  },
+  {
+    "Name": "Kawasaki Ninja",
+    "Type": 3,
+    "Mark": "Kawasaki",
+    "Seats": 2,
+    "Fuel": "Petrol",
+    "Year": 2020,
+    "Cost": 35,
+    "RegistrationNumber": "MOTO9012"
+  },
+  {
+    "Name": "Volvo FH16",
+    "Type": 2,
+    "Mark": "Volvo",
+    "Seats": 2,
+    "Fuel": "Diesel",
+    "Year": 2019,
+    "Cost": 100,
+    "RegistrationNumber": "TRUCK1234"
+  },
+  {
+    "Name": "Scania R450",
+    "Type": 2,
+    "Mark": "Scania",
+    "Seats": 2,
+    "Fuel": "Diesel",
+    "Year": 2021,
+    "Cost": 110,
+    "RegistrationNumber": "TRUCK5678"
+  },
+  {
+    "Name": "Mercedes Actros",
+    "Type": 2,
+    "Mark": "Mercedes",
+    "Seats": 2,
+    "Fuel": "Diesel",
+    "Year": 2022,
+    "Cost": 120,
+    "RegistrationNumber": "TRUCK9012"
+  }
+]
