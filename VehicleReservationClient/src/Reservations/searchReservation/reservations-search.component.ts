@@ -4,10 +4,9 @@ import { map } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 
 enum VehicleType {
-  None = 0,
   Car = 'Car',
+  Truck = 'Truck',
   Motorcycle = 'Motorcycle',
-  Truck = 'Truck'
 }
 
 interface Vehicle {
@@ -27,8 +26,8 @@ interface Vehicle {
   styleUrl: './reservations-search.component.css',
   standalone: true,
   imports: [FormsModule],
-
 })
+
 export class ReservationSearchComponent {
   vehicleTypes = Object.values(VehicleType).filter(value => typeof value === 'string');
   availableVehicles: Vehicle[] = [];
@@ -36,10 +35,11 @@ export class ReservationSearchComponent {
   startDate: string = '2025-10-25';
   endDate: string = '2025-10-26';
   selectedVehicleType: VehicleType = VehicleType.Car;
-  orderBy: string = 'lastActive'; 
 
   constructor(private http: HttpClient) {}
-
+  ngOnInit(): void {
+    this.getAvailableReservations();
+  }
   getAvailableReservations() {
     const params = {
       startDate: this.startDate,
@@ -66,7 +66,7 @@ export class ReservationSearchComponent {
   resetFilters() {
     this.startDate = '';
     this.endDate = '';
-    this.selectedVehicleType = VehicleType.None;
+    this.selectedVehicleType = VehicleType.Car;
   }
 
   bookVehicle(vehicleId: string) {

@@ -4,7 +4,7 @@
     {
         None = 0,
         Car,
-        Motocycle,
-        Truck
+        Truck,
+        Motorcycle
     }
 }

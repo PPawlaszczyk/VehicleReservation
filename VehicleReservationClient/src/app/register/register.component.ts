@@ -30,8 +30,7 @@ private router = inject(Router);
     });
   }
 
-  matchValues(matchTo: string) : ValidatorFn{
-    
+  matchValues(matchTo: string) : ValidatorFn{ 
     return (control: AbstractControl) =>  {
       return control.value ===control.parent?.get(matchTo)?.value ? null : {isMatching: true}
     }
