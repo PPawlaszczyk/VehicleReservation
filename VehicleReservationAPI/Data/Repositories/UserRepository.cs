@@ -1,4 +1,5 @@
-﻿using VehicleReservationAPI.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using VehicleReservationAPI.Entities;
 using VehicleReservationAPI.Interfaces;
 
 namespace VehicleReservationAPI.Data.Repositories
@@ -7,7 +8,7 @@ namespace VehicleReservationAPI.Data.Repositories
     {
         public async Task<AppUser?> GetUserByIdAsync(string id)
         {
-            return await context.Users.FindAsync(id);
+            return await context.Users.FindAsync(Guid.Parse(id));
         }
     }
 }

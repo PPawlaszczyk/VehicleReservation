@@ -5,6 +5,5 @@
         None = 0,
         Reserved = 1,
         Returned = 2,
-
     }
 }

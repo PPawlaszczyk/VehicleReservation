@@ -25,27 +25,27 @@ namespace VehicleReservationAPI.Data.Repositories
             return newVehicle;
         }
 
-        public async Task<IEnumerable<UserReservationDto>> GetAllReservationsByUserAsync(Guid UserId)
+        public async Task<IEnumerable<UserReservationDto>> GetCurrentReservationsByUserAsync(Guid UserId)
         {
             return await context.Reservations
                 .Include(x=>x.Vehicle)
-                .Where(x=>x.AppUserId == UserId && x.Status == Status.Reserved)
-                .Select(x=> new UserReservationDto
+                .Where(reservation=>reservation.AppUserId == UserId && reservation.Status == Status.Reserved)
+                .Select(reservation=> new UserReservationDto
                 {
-                StartDate = x.StartDate,
-                EndDate= x.EndDate,
-                Id = x.Id,
-                Vehicle = new VehicleForUserReservationDto
-                    {
-                        Cost = x.Vehicle.Cost,
-                        Seats = x.Vehicle.Seats,
-                        Fuel = x.Vehicle.Fuel,
-                        Mark = x.Vehicle.Mark,
-                        Name = x.Vehicle.Name,
-                        RegistrationNumber = x.Vehicle.RegistrationNumber,
-                        Type = x.Vehicle.Type,
-                        Year = x.Vehicle.Year,
-                    }
+                    StartDate = reservation.StartDate,
+                    EndDate= reservation.EndDate,
+                    Id = reservation.Id,
+                    Vehicle = new VehicleForUserReservationDto
+                        {
+                            Cost = reservation.Vehicle.Cost,
+                            Seats = reservation.Vehicle.Seats,
+                            Fuel = reservation.Vehicle.Fuel,
+                            Mark = reservation.Vehicle.Mark,
+                            Name = reservation.Vehicle.Name,
+                            RegistrationNumber = reservation.Vehicle.RegistrationNumber,
+                            Type = reservation.Vehicle.Type,
+                            Year = reservation.Vehicle.Year,
+                        }
                 })
                 .ToListAsync();
         }
@@ -53,8 +53,8 @@ namespace VehicleReservationAPI.Data.Repositories
         public async Task<IEnumerable<GetExpiringReservationsDto>> GetExpiringReservationsAsync(DateOnly date)
         {
             return await context.Reservations
-                .Include(r => r.Vehicle)
-                .Where(r => r.EndDate <= date && r.Status == Status.Reserved)
+                .Include(reservation => reservation.Vehicle)
+                .Where(reservation => reservation.EndDate <= date && reservation.Status == Status.Reserved)
                 .Select(reservation => new GetExpiringReservationsDto 
                 { 
                     AppUserId = reservation.AppUserId, 
@@ -66,7 +66,7 @@ namespace VehicleReservationAPI.Data.Repositories
         }
         public async Task<Reservation?> GetReservationByIdAsync(Guid id)
         {
-            return await context.Reservations.FirstOrDefaultAsync(r => r.Id == id);
+            return await context.Reservations.FirstOrDefaultAsync(reservation => reservation.Id == id);
         }
 
         public async Task<bool> IsVehicleReservatedAsync(DateOnly startDate, DateOnly endDate, Guid vehicleid)
@@ -79,9 +79,9 @@ namespace VehicleReservationAPI.Data.Repositories
                 );
         }
 
-        public void ReturnReservation(Guid reservationId)
+        public async Task ReturnReservationAsync(Guid reservationId)
         {
-            var reservation = context.Reservations.FirstOrDefault(reservation => reservation.Id == reservationId);
+            var reservation = await context.Reservations.FirstOrDefaultAsync(reservation => reservation.Id == reservationId);
 
             if (reservation != null && reservation.Status == Status.Reserved)
             {

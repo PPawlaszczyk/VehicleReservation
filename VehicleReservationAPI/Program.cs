@@ -50,11 +50,10 @@ using var scope = app.Services.CreateScope();
         var context = services.GetRequiredService<DataContext>();
         var userManager = services.GetRequiredService<UserManager<AppUser>>();
         var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
-        var unitofWork = services.GetRequiredService<IUnitOfWork>();
+        var unitOfWork = services.GetRequiredService<IUnitOfWork>();
 
         await context.Database.MigrateAsync();
-
-        await Seed.SeedUsers(unitofWork, userManager, roleManager);
+        await Seed.SeedUsers(unitOfWork, userManager, roleManager);
         await context.SaveChangesAsync();
 
     }

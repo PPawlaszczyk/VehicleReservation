@@ -14,7 +14,7 @@ namespace VehicleReservationAPI.CQRS.Reservations.Queries
         public async Task<IEnumerable<UserReservationDto>> Handle(GetUserAllReservationsQuery query, CancellationToken cancellationToken)
         {
 
-            return await unitOfWork.ReservationRepository.GetAllReservationsByUserAsync(query.AppUserId);
+            return await unitOfWork.ReservationRepository.GetCurrentReservationsByUserAsync(query.AppUserId);
         }
     }
 }

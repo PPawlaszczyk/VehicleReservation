@@ -20,27 +20,35 @@ namespace VehicleReservationAPI.CQRS.Reservations.Commands
             var validator = new CreateReservationCommandValidator();
             validator.ThrowIfInvalid(command);
 
+
+            var user = await unitOfWork.UserRepository.GetUserByIdAsync(command.AppUserId.ToString());
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("User doesn't exsists");
+            }
+
             var vehicle = await unitOfWork.VehiclesRepository.GetVehicleByIdAsync(command.VehicleId);
 
             if (vehicle == null || !vehicle.IsAvailable)
             {
-                throw new InvalidOperationException("Vehicle is not available or doesnt exists");
+                throw new InvalidOperationException("Vehicle is not available or doesn't exists");
             }
 
-            var isReservation = await unitOfWork.ReservationRepository.IsVehicleReservatedAsync
+            var isReserved = await unitOfWork.ReservationRepository.IsVehicleReservatedAsync
                 (
                 startDate: command.StartDate,
                 endDate: command.EndDate,
                 vehicleid: command.VehicleId
                 );
 
-            if (isReservation)
+            if (isReserved)
             {
                 throw new InvalidOperationException("Cannot make reservation in this time");
             }
 
-            var response = unitOfWork.ReservationRepository.AddVehicleReservation(command); 
-
+            var response = unitOfWork.ReservationRepository.AddVehicleReservation(command);
+            
             if (await unitOfWork.Complete())
             {
                 return response.Id;

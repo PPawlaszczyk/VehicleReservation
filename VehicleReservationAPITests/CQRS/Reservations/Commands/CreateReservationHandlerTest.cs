@@ -1,13 +1,15 @@
 ﻿using Moq;
 using VehicleReservationAPI.CQRS.Reservations.Commands;
+using VehicleReservationAPI.Entities;
 using VehicleReservationAPI.Enums;
 using VehicleReservationAPI.Interfaces;
 
 public class CreateReservationHandlerTest
 {
-    private readonly Mock<IUnitOfWork> mockUnitOfWork;
-    private readonly Mock<IVehiclesRepository> mockVehiclesRepository;
-    private readonly Mock<IReservationRepository> mockReservationRepository;
+    private readonly Mock<IUnitOfWork> mockUnitOfWork = new();
+    private readonly Mock<IVehiclesRepository> mockVehiclesRepository = new();
+    private readonly Mock<IReservationRepository> mockReservationRepository = new();
+    private readonly Mock<IUserRepository> mockUserRepository = new();
     private readonly CreateReservationCommandHandler handler;
     private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Now);
     private readonly DateOnly tomorrow = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
@@ -15,11 +17,9 @@ public class CreateReservationHandlerTest
 
     public CreateReservationHandlerTest()
     {
-        mockUnitOfWork = new();
-        mockVehiclesRepository = new();
-        mockReservationRepository = new();
-        mockUnitOfWork.Setup(u => u.VehiclesRepository).Returns(mockVehiclesRepository.Object);
-        mockUnitOfWork.Setup(u => u.ReservationRepository).Returns(mockReservationRepository.Object);
+        mockUnitOfWork.Setup(unitOfWork => unitOfWork.VehiclesRepository).Returns(mockVehiclesRepository.Object);
+        mockUnitOfWork.Setup(unitOfWork => unitOfWork.ReservationRepository).Returns(mockReservationRepository.Object);
+        mockUnitOfWork.Setup(unitOfWork => unitOfWork.UserRepository).Returns(mockUserRepository.Object);
 
         handler = new CreateReservationCommandHandler(mockUnitOfWork.Object);
 
@@ -48,9 +48,14 @@ public class CreateReservationHandlerTest
 
         var reservation = reservationBuilder.Build();
 
-        mockVehiclesRepository.Setup(vr => vr.GetVehicleByIdAsync(command.VehicleId)).ReturnsAsync(vehicle);
-        mockReservationRepository.Setup(rr => rr.IsVehicleReservatedAsync(command.StartDate, command.EndDate, command.VehicleId)).ReturnsAsync(false);
-        mockReservationRepository.Setup(rr => rr.AddVehicleReservation(command)).Returns(reservation);
+        mockUserRepository.Setup(user => user.GetUserByIdAsync(command.AppUserId.ToString())).ReturnsAsync(
+            new AppUser
+            {
+                Created = DateTime.UtcNow,
+            });
+        mockVehiclesRepository.Setup(vehicle => vehicle.GetVehicleByIdAsync(command.VehicleId)).ReturnsAsync(vehicle);
+        mockReservationRepository.Setup(reservation => reservation.IsVehicleReservatedAsync(command.StartDate, command.EndDate, command.VehicleId)).ReturnsAsync(false);
+        mockReservationRepository.Setup(reservation => reservation.AddVehicleReservation(command)).Returns(reservation);
         mockUnitOfWork.Setup(u => u.Complete()).ReturnsAsync(true);
 
         // Act
@@ -71,12 +76,16 @@ public class CreateReservationHandlerTest
         vehicleBuilder.WithIsAvailable(false);
         var vehicle = vehicleBuilder.Build();
 
-        mockVehiclesRepository.Setup(vr => vr.GetVehicleByIdAsync(command.VehicleId)).ReturnsAsync(vehicle);
+        mockUserRepository.Setup(user => user.GetUserByIdAsync(command.AppUserId.ToString())).ReturnsAsync(
+            new AppUser
+            {
+                Created = DateTime.UtcNow,
+            });
+        mockVehiclesRepository.Setup(vehicle => vehicle.GetVehicleByIdAsync(command.VehicleId)).ReturnsAsync(vehicle);
 
         // Act & Assert
         
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await handler.Handle(command, CancellationToken.None));
-        
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await handler.Handle(command, CancellationToken.None));    
     }
 
     [Fact]
@@ -94,8 +103,12 @@ public class CreateReservationHandlerTest
         reservationBuilder.WithStatus(Status.Reserved);
         var existingReservation = reservationBuilder.Build();
 
-        mockVehiclesRepository.Setup(vr => vr.GetVehicleByIdAsync(command.VehicleId)).ReturnsAsync(vehicle);
-        mockReservationRepository.Setup(rr => rr.IsVehicleReservatedAsync(command.StartDate, command.EndDate, command.VehicleId)).ReturnsAsync(true);
+        mockUserRepository.Setup(user => user.GetUserByIdAsync(command.AppUserId.ToString())).ReturnsAsync(
+            new AppUser { 
+                Created = DateTime.UtcNow,
+            });
+        mockVehiclesRepository.Setup(vehicle => vehicle.GetVehicleByIdAsync(command.VehicleId)).ReturnsAsync(vehicle);
+        mockReservationRepository.Setup(reservation => reservation.IsVehicleReservatedAsync(command.StartDate, command.EndDate, command.VehicleId)).ReturnsAsync(true);
 
         // Act & Assert
 

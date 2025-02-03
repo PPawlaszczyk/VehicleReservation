@@ -37,7 +37,7 @@ export class ReservationSearchComponent {
       type: VehicleType[this.selectedVehicleType]
     };
 
-    this.http.get<Vehicle[]>( this.baseUrl + 'Vehicle/get-available-vehicles', { params })
+    this.http.get<Vehicle[]>( this.baseUrl + 'Vehicle/available', { params })
       .pipe(
         map(vehicles => {
           console.log('API Response:', vehicles);
@@ -66,7 +66,7 @@ export class ReservationSearchComponent {
       endDate: this.endDate
     }
 
-    return this.http.post<CreateReservationDto>( this.baseUrl + 'reservation/create-reservation-vehicle', reservation)
+    return this.http.post<CreateReservationDto>( this.baseUrl + 'reservation/create', reservation)
     .pipe(
       map(reservation => {
         console.log('API Response:', reservation);

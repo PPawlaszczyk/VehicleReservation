@@ -6,15 +6,13 @@ using VehicleReservationAPI.Interfaces;
 
 public class GetAvailableVehiclesHandlerTests
 {
-    private readonly Mock<IUnitOfWork> mockUnitOfWork;
-    private readonly Mock<IVehiclesRepository> mockVehiclesRepository;
+    private readonly Mock<IUnitOfWork> mockUnitOfWork = new();
+    private readonly Mock<IVehiclesRepository> mockVehiclesRepository = new();
     private readonly GetAvailableVehicleQueryHandler handler;
 
     public GetAvailableVehiclesHandlerTests()
     {
-        mockUnitOfWork = new Mock<IUnitOfWork>();
-        mockVehiclesRepository = new Mock<IVehiclesRepository>();
-        mockUnitOfWork.Setup(u => u.VehiclesRepository).Returns(mockVehiclesRepository.Object);
+        mockUnitOfWork.Setup(unitOfWork => unitOfWork.VehiclesRepository).Returns(mockVehiclesRepository.Object);
         handler = new GetAvailableVehicleQueryHandler(mockUnitOfWork.Object);
     }
 
@@ -56,7 +54,7 @@ public class GetAvailableVehiclesHandlerTests
             }
         };
 
-        mockVehiclesRepository.Setup(v => v.GetAvailbleVehiclesAsync(command.StartDate, command.EndDate, command.Type))
+        mockVehiclesRepository.Setup(vehicle => vehicle.GetAvailbleVehiclesAsync(command.StartDate, command.EndDate, command.Type))
                               .ReturnsAsync(availableVehicles);
 
         // Act
@@ -81,7 +79,7 @@ public class GetAvailableVehiclesHandlerTests
             Type = VehicleType.Car
         };
 
-        mockVehiclesRepository.Setup(v => v.GetAvailbleVehiclesAsync(command.StartDate, command.EndDate, command.Type))
+        mockVehiclesRepository.Setup(vehicle => vehicle.GetAvailbleVehiclesAsync(command.StartDate, command.EndDate, command.Type))
                               .ReturnsAsync(new List<GetAvailableVehiclesDto>());
 
         // Act

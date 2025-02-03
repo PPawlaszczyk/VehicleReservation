@@ -27,7 +27,7 @@ VehicleType: any;
   }
   
   getAllUserReservations() {
-      this.http.get<UserReservationDto[]>( `${this.baseUrl}Reservation/get-user-all-reservations`)
+      this.http.get<UserReservationDto[]>( `${this.baseUrl}Reservation/my-reservations`)
         .pipe(
           map(reservations => {
             console.log('API Response:', reservations);
@@ -48,7 +48,7 @@ VehicleType: any;
     const reservation: ReturnReservedVehicleCommand = {
       reservationId: reservationId,
     }
-        return this.http.post( this.baseUrl + 'reservation/return-reserved-vehicle',reservation)
+        return this.http.post( this.baseUrl + 'reservation/return',reservation)
         .pipe(
           map(reservation => {
             console.log('API Response:', reservation);

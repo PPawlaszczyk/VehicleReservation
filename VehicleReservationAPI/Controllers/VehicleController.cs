@@ -11,8 +11,8 @@ namespace VehicleReservationAPI.Controllers
     [Route("api/[controller]")]
     public class VehicleController(IMediator mediator) : ControllerBase
     {
-        [HttpGet("get-available-vehicles")]
-        public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> GetAvailableVehicles(DateOnly startDate, DateOnly endDate, VehicleType type)
+        [HttpGet("available")]
+        public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> GetAvailableVehicles([FromQuery] DateOnly startDate, DateOnly endDate, VehicleType type)
         {
             return Ok(await mediator.Send(new GetAvailableVehicleQuery
             {
@@ -23,7 +23,7 @@ namespace VehicleReservationAPI.Controllers
         }
 
         [Authorize(Policy = "RequireAdminRole")]
-        [HttpPost("create-vehicle")]
+        [HttpPost("create")]
         public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> CreateVehicle([FromBody] CreateVehicleCommand vehicle)
         {
             return Ok(await mediator.Send(vehicle));

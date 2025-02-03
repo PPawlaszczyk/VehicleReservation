@@ -12,14 +12,14 @@ namespace VehicleReservationAPI.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddControllers();
-            services.AddDbContext<DataContext>(opt =>
+            services.AddDbContext<DataContext>(option =>
             {
-                opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                option.UseSqlServer(config.GetConnectionString("DefaultConnection"));
 
             });
             services.AddEndpointsApiExplorer();
             services.AddCors();
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
+            services.AddMediatR(config => config.RegisterServicesFromAssemblies(typeof(Program).Assembly));
 
             services.AddSwaggerGen(config =>
             {
@@ -33,6 +33,7 @@ namespace VehicleReservationAPI.Extensions
                     In = ParameterLocation.Header,
                     Description = "Here enter JWT with bearer format like bearer[space] token"
                 });
+
                 config.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {

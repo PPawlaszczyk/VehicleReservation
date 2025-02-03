@@ -10,7 +10,7 @@ namespace VehicleReservationAPI.Extensions
 
             if (result != null && !result.IsValid)
             {
-                var errorMessages = string.Join("; ", result.Errors.Select(e => e.ErrorMessage));
+                var errorMessages = string.Join("; ", result.Errors.Select(error => error.ErrorMessage));
                 throw new InvalidOperationException(errorMessages);
             }
         }

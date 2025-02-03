@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using VehicleReservationAPI.CQRS.Reservations.Commands;
 using VehicleReservationAPI.CQRS.Reservations.Queries;
 using VehicleReservationAPI.DTOs;
-using VehicleReservationAPI.Entities;
 using VehicleReservationAPI.Extensions;
 using VehicleReservationAPI.Interfaces;
 
@@ -15,7 +14,7 @@ namespace VehicleReservationAPI.Controllers
     public class ReservationController(IMediator mediator, IMessageProducer messageProducer) : ControllerBase
     {
         [Authorize]
-        [HttpPost("create-reservation-vehicle")]
+        [HttpPost("create")]
         public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationDto reservation)
         {
             var reservationCommand = new CreateReservationCommand
@@ -32,7 +31,7 @@ namespace VehicleReservationAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost("return-reserved-vehicle")]
+        [HttpPost("return")]
         public async Task<ActionResult> ReturnReservedVehicle([FromBody] ReturnReservedVehicleCommand reservation)
         {
             await mediator.Send(reservation);
@@ -40,8 +39,8 @@ namespace VehicleReservationAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("get-user-all-reservations")]
-        public async Task<ActionResult<IEnumerable<UserReservationDto>>> GetUserAllReservations()
+        [HttpGet("my-reservations")]
+        public async Task<ActionResult<IEnumerable<UserReservationDto>>> GetUserReservations()
         {
             return Ok(await mediator.Send(
                 new GetUserAllReservationsQuery 

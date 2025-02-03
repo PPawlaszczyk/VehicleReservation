@@ -1,6 +1,4 @@
-﻿using VehicleReservationAPI.Enums;
-
-namespace VehicleReservationAPI.DTOs
+﻿namespace VehicleReservationAPI.DTOs
 {
     public record UserReservationDto
     {

@@ -6,16 +6,14 @@ using VehicleReservationAPI.Interfaces;
 
 public class CreateVehicleHandlerTest
 {
-    private readonly Mock<IUnitOfWork> mockUnitOfWork;
-    private readonly Mock<IVehiclesRepository> mockVehiclesRepository;
+    private readonly Mock<IUnitOfWork> mockUnitOfWork = new();
+    private readonly Mock<IVehiclesRepository> mockVehiclesRepository = new();
     private readonly CreateVehicleHandler handler;
     private readonly CreateVehicleCommand command;
 
     public CreateVehicleHandlerTest()
     {
-        mockUnitOfWork = new Mock<IUnitOfWork>();
-        mockVehiclesRepository = new Mock<IVehiclesRepository>();
-        mockUnitOfWork.Setup(u => u.VehiclesRepository).Returns(mockVehiclesRepository.Object);
+        mockUnitOfWork.Setup(unitOfWork => unitOfWork.VehiclesRepository).Returns(mockVehiclesRepository.Object);
         handler = new CreateVehicleHandler(mockUnitOfWork.Object);
         command = new CreateVehicleCommand
         {
@@ -46,13 +44,13 @@ public class CreateVehicleHandlerTest
              .WithRegistrationNumber(command.RegistrationNumber)
              .Build();
 
-        mockVehiclesRepository.Setup(v => v.IsVehicleRegistrationExistsAsync(command.RegistrationNumber))
+        mockVehiclesRepository.Setup(vehicle => vehicle.IsVehicleRegistrationExistsAsync(command.RegistrationNumber))
                               .ReturnsAsync(false);
 
-        mockVehiclesRepository.Setup(v => v.AddVehicle(command))
+        mockVehiclesRepository.Setup(vehicle => vehicle.AddVehicle(command))
                               .Returns(newVehicle);
 
-        mockUnitOfWork.Setup(u => u.Complete()).ReturnsAsync(true);
+        mockUnitOfWork.Setup(unitOfWork => unitOfWork.Complete()).ReturnsAsync(true);
 
         // Act
 
@@ -61,9 +59,9 @@ public class CreateVehicleHandlerTest
         // Assert
 
         Assert.NotEqual(Guid.Empty, result);
-        mockVehiclesRepository.Verify(v => v.IsVehicleRegistrationExistsAsync(command.RegistrationNumber), Times.Once);
-        mockVehiclesRepository.Verify(v => v.AddVehicle(command), Times.Once);
-        mockUnitOfWork.Verify(u => u.Complete(), Times.Once);
+        mockVehiclesRepository.Verify(vehicle => vehicle.IsVehicleRegistrationExistsAsync(command.RegistrationNumber), Times.Once);
+        mockVehiclesRepository.Verify(vehicle => vehicle.AddVehicle(command), Times.Once);
+        mockUnitOfWork.Verify(unitOfWork => unitOfWork.Complete(), Times.Once);
     }
 
     [Fact]
@@ -72,7 +70,7 @@ public class CreateVehicleHandlerTest
         // Arrange
 
         mockVehiclesRepository.Setup(v => v.IsVehicleRegistrationExistsAsync(command.RegistrationNumber))
-                              .ReturnsAsync(true);  // Simulate that the registration number already exists
+                              .ReturnsAsync(true);
 
         // Act & Assert
 
@@ -85,13 +83,13 @@ public class CreateVehicleHandlerTest
     {
         // Arrange
 
-        mockVehiclesRepository.Setup(v => v.IsVehicleRegistrationExistsAsync(command.RegistrationNumber))
+        mockVehiclesRepository.Setup(vehicle => vehicle.IsVehicleRegistrationExistsAsync(command.RegistrationNumber))
                               .ReturnsAsync(false);
 
-        mockVehiclesRepository.Setup(v => v.AddVehicle(command))
-                              .Returns((Vehicle)null);  // Simulate that vehicle creation failed
+        mockVehiclesRepository.Setup(vehicle => vehicle.AddVehicle(command))
+                              .Returns((Vehicle)null);
 
-        mockUnitOfWork.Setup(u => u.Complete()).ReturnsAsync(false);  // Simulate that unit of work didn't succeed
+        mockUnitOfWork.Setup(unitOfWork => unitOfWork.Complete()).ReturnsAsync(false);
 
         // Act & Assert
 

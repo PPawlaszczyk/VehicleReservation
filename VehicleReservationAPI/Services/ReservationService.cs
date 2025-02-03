@@ -32,8 +32,9 @@ public class ReservationNotifier : BackgroundService
 
         foreach (var reservation in expiringReservations)
         {
-            var message = $"Your reservation for vehicle {reservation.Name} with registration {reservation.RegistrationNumber}" +
-                $" need to be returned until {reservation.ReturnDate} till 12:00";
+            var message = $"Your reservation for the vehicle {reservation.Name}" +
+                $" with registration {reservation.RegistrationNumber} needs to be returned by {reservation.ReturnDate} at 12:00.";
+
             await _hubContext.Clients.User(reservation.AppUserId.ToString()).SendAsync("ReceiveNotification", message);
         }
     }

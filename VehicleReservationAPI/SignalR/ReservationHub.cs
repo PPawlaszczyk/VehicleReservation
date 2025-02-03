@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using VehicleReservationAPI.Extensions;
 
 namespace VehicleReservationAPI.SignalR
 {

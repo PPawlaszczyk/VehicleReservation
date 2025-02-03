@@ -31,38 +31,38 @@ namespace VehicleReservationAPI.Data.Repositories
         public async Task<IEnumerable<GetAvailableVehiclesDto>> GetAvailbleVehiclesAsync(DateOnly startDate, DateOnly endDate, VehicleType type)
         {
             return await context.Vehicles
-            .Include(x => x.Reservations)
-            .Where(x => x.IsAvailable 
-            && !x.IsDeletedOrNull.HasValue 
-            && x.Type == type 
-            && !x.Reservations
-                .Any(r =>
-                     (r.StartDate <= endDate &&
-                     r.EndDate >= startDate)
+            .Include(vehicle => vehicle.Reservations)
+            .Where(vehicle => vehicle.IsAvailable 
+            && !vehicle.IsDeletedOrNull.HasValue 
+            && vehicle.Type == type 
+            && !vehicle.Reservations
+                .Any(reservation =>
+                     (reservation.StartDate <= endDate &&
+                     reservation.EndDate >= startDate)
             ))
-            .Select(x=> new GetAvailableVehiclesDto 
+            .Select(vehicle => new GetAvailableVehiclesDto 
             {
-                VehicleId = x.Id,
-                Cost = x.Cost, 
-                Fuel = x.Fuel, 
-                Mark = x.Mark, 
-                Name = x.Name, 
-                Seats = x.Seats,
-                Type = x.Type, 
-                Year = x.Year
+                VehicleId = vehicle.Id,
+                Cost = vehicle.Cost, 
+                Fuel = vehicle.Fuel, 
+                Mark = vehicle.Mark, 
+                Name = vehicle.Name, 
+                Seats = vehicle.Seats,
+                Type = vehicle.Type, 
+                Year = vehicle.Year
             })
             .ToListAsync();
         }
 
         public async Task<Vehicle?> GetVehicleByIdAsync(Guid id)
         {
-            return await context.Vehicles.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeletedOrNull.HasValue);  
+            return await context.Vehicles.FirstOrDefaultAsync(vehicle => vehicle.Id == id && !vehicle.IsDeletedOrNull.HasValue);  
         }
 
         public async Task<bool> IsVehicleRegistrationExistsAsync(string registration)
         {
             return await context.Vehicles
-                .AnyAsync(x => x.RegistrationNumber.ToLower() == registration.Trim().ToLower() && !x.IsDeletedOrNull.HasValue);
+                .AnyAsync(vehicle => vehicle.RegistrationNumber.ToLower() == registration.Trim().ToLower() && !vehicle.IsDeletedOrNull.HasValue);
         }
     }
 }

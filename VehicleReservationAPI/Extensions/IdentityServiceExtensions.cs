@@ -11,8 +11,8 @@ namespace VehicleReservationAPI.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddIdentityCore<AppUser>(opt => {
-                opt.Password.RequireNonAlphanumeric = false;
+            services.AddIdentityCore<AppUser>(option => {
+                option.Password.RequireNonAlphanumeric = false;
             })
             .AddRoles<AppRole>()
             .AddRoleManager<RoleManager<AppRole>>()
@@ -30,7 +30,6 @@ namespace VehicleReservationAPI.Extensions
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
-
                 };
 
                 options.Events = new JwtBearerEvents

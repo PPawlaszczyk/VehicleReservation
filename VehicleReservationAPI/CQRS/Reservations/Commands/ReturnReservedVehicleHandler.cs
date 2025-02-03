@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using VehicleReservationAPI.Entities;
 using VehicleReservationAPI.Interfaces;
 
 namespace VehicleReservationAPI.CQRS.Reservations.Commands
@@ -13,7 +12,7 @@ namespace VehicleReservationAPI.CQRS.Reservations.Commands
     {
         public async Task Handle(ReturnReservedVehicleCommand command, CancellationToken cancellationToken)
         {
-            unitOfWork.ReservationRepository.ReturnReservation(command.ReservationId);
+            await unitOfWork.ReservationRepository.ReturnReservationAsync(command.ReservationId);
 
             if (await unitOfWork.Complete())
             {
