@@ -41,7 +41,7 @@ namespace VehicleReservationAPI.Extensions
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id="Bearer"
+                                Id = "Bearer"
                             }
                         },
                         new string[]
@@ -56,9 +56,10 @@ namespace VehicleReservationAPI.Extensions
             services.AddScoped<IVehiclesRepository, VehiclesRepository>();
             services.AddScoped<IReservationRepository, ReservationsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddSignalR();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddHostedService<ReservationNotifier>();
+            services.AddSignalR();
+            services.AddHostedService<ReservationNotifier>();
+
             return services;
         }
     }

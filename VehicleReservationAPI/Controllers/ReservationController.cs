@@ -2,7 +2,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleReservationAPI.CQRS.Reservations.Commands;
+using VehicleReservationAPI.CQRS.Reservations.Queries;
+using VehicleReservationAPI.DTOs;
 using VehicleReservationAPI.Entities;
+using VehicleReservationAPI.Extensions;
 using VehicleReservationAPI.Interfaces;
 
 namespace VehicleReservationAPI.Controllers
@@ -13,11 +16,18 @@ namespace VehicleReservationAPI.Controllers
     {
         [Authorize]
         [HttpPost("create-reservation-vehicle")]
-        public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationCommand reservation)
+        public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationDto reservation)
         {
-            await mediator.Send(reservation);
+            var reservationCommand = new CreateReservationCommand
+            {
+                AppUserId = User.GetUserId(),
+                StartDate = reservation.StartDate,
+                EndDate = reservation.EndDate,
+                VehicleId = reservation.VehicleId,
+            };
 
-            await messageProducer.SendingMessage(reservation);
+            await mediator.Send(reservationCommand);
+            await messageProducer.SendingMessage(reservationCommand);
             return Ok();
         }
 
@@ -27,6 +37,18 @@ namespace VehicleReservationAPI.Controllers
         {
             await mediator.Send(reservation);
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("get-user-all-reservations")]
+        public async Task<ActionResult<IEnumerable<UserReservationDto>>> GetUserAllReservations()
+        {
+            return Ok(await mediator.Send(
+                new GetUserAllReservationsQuery 
+                { 
+                    AppUserId = User.GetUserId() 
+                }
+                ));            
         }
     }
 }
