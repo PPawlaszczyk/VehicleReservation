@@ -1,26 +1,26 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using VehicleReservationAPI.Data;
 using VehicleReservationAPI.Entities;
 using VehicleReservationAPI.Extensions;
 using VehicleReservationAPI.Interfaces;
 using VehicleReservationAPI.Middleware;
+using VehicleReservationAPI.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
+
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(5000);
 });
+
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
-
-//app.MapHub<ReservationHub>("/reservationHub");
 
 if (app.Environment.IsDevelopment())
 {
@@ -38,7 +38,7 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrig
 
 app.UseAuthentication();
 app.UseAuthorization();
-//app.MapHub<PresenceHub>("hubs/message");
+app.MapHub<ReservationHub>("/hubs/reservation");
 
 
 app.MapControllers();

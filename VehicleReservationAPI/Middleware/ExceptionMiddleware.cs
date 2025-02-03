@@ -12,7 +12,7 @@ namespace VehicleReservationAPI.Middleware
             {
                 await next(context);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
                 context.Response.ContentType = "application/json";

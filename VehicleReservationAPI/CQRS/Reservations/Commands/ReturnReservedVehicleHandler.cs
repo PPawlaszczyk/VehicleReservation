@@ -15,7 +15,6 @@ namespace VehicleReservationAPI.CQRS.Reservations.Commands
         {
             unitOfWork.ReservationRepository.ReturnReservation(command.ReservationId);
 
-
             if (await unitOfWork.Complete())
             {
                 return;

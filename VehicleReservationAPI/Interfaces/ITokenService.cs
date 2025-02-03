@@ -1,5 +1,4 @@
-﻿
-using VehicleReservationAPI.Entities;
+﻿using VehicleReservationAPI.Entities;
 
 namespace VehicleReservationAPI.Interfaces
 {

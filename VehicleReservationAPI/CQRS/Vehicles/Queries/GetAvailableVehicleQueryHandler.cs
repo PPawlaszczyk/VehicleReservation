@@ -16,16 +16,16 @@ namespace VehicleReservationAPI.CQRS.Vehicles.Queries
 
     public class GetAvailableVehicleQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAvailableVehicleQuery, IEnumerable<GetAvailableVehiclesDto>>
     {
-        public async Task<IEnumerable<GetAvailableVehiclesDto>> Handle(GetAvailableVehicleQuery command, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetAvailableVehiclesDto>> Handle(GetAvailableVehicleQuery query, CancellationToken cancellationToken)
         {
             var validator = new GetAvailableVehiclesCommandValidator();
-            validator.ThrowIfInvalid(command);
+            validator.ThrowIfInvalid(query);
 
             var response = await unitOfWork.VehiclesRepository.GetAvailbleVehiclesAsync
                 (
-                startDate: command.StartDate,
-                endDate: command.EndDate,
-                type: command.Type
+                startDate: query.StartDate,
+                endDate: query.EndDate,
+                type: query.Type
                 ) ?? [];
 
             return response;

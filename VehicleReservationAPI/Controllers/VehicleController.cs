@@ -22,12 +22,6 @@ namespace VehicleReservationAPI.Controllers
             }));
         }
 
-        [HttpGet("get-vehicle-details")]
-        public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> GetVehicleDetails(Guid VehicleId)
-        {
-            throw new NotImplementedException();
-        }
-
         [Authorize(Policy = "RequireAdminRole")]
         [HttpPost("create-vehicle")]
         public async Task<ActionResult<IEnumerable<GetAvailableVehicleQueryHandler>>> CreateVehicle([FromBody] CreateVehicleCommand vehicle)

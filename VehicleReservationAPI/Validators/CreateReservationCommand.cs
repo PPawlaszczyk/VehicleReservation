@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using VehicleReservationAPI.CQRS.Account.Commands;
 using VehicleReservationAPI.CQRS.Reservations.Commands;
 
 namespace VehicleReservationAPI.Validators

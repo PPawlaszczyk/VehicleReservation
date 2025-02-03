@@ -1,10 +1,10 @@
 ﻿namespace VehicleReservationAPI.DTOs
 {
-    public class GetExpiringReservationsDto
+    public record GetExpiringReservationsDto
     {
-        public required Guid AppUserId { get; set; }
-        public required string RegistrationNumber { get; set; }
-        public required string Name { get; set; }
-
+        public required Guid AppUserId { get; init; }
+        public required string RegistrationNumber { get; init; }
+        public required string Name { get; init; }
+        public required DateOnly ReturnDate { get; init; }
     }
 }
