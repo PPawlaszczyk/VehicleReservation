@@ -69,7 +69,15 @@ services:
         condition: service_healthy
       dotnet-app:
         condition: service_healthy   
-             
+  client-app:
+    container_name: client-app
+    build:
+      context: ./VehicleReservationClient
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "4200:4200"             
 volumes:
   mssql-data:
     driver: local
