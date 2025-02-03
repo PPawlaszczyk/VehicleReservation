@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
-
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(5000);

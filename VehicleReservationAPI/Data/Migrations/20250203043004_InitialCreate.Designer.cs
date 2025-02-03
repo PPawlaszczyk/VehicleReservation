@@ -12,7 +12,7 @@ using VehicleReservationAPI.Data;
 namespace VehicleReservationAPI.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250127233737_InitialCreate")]
+    [Migration("20250203043004_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -237,14 +237,11 @@ namespace VehicleReservationAPI.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AppUserId")
+                    b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
@@ -374,7 +371,9 @@ namespace VehicleReservationAPI.Data.Migrations
                 {
                     b.HasOne("VehicleReservationAPI.Entities.AppUser", null)
                         .WithMany("Reservations")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("VehicleReservationAPI.Entities.Vehicle", "Vehicle")
                         .WithMany("Reservations")

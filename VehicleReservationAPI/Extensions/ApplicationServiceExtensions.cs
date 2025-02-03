@@ -59,7 +59,6 @@ namespace VehicleReservationAPI.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSignalR();
             services.AddHostedService<ReservationNotifier>();
-
             return services;
         }
     }
