@@ -8,4 +8,4 @@ To assign a token to a user, first log in, then copy the token value from the re
 
 The frontend is available at http://localhost:4200.
 
-The console application for rabbitMQ, mssql database, and web API can be started using Docker Compose. However, there is no Dockerfile created for the client application.
+The console application for rabbitMQ, mssql database, client, and web API can be started using Docker Compose.
