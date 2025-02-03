@@ -37,8 +37,8 @@ namespace VehicleReservationAPI.Data.Repositories
             && x.Type == type 
             && !x.Reservations
                 .Any(r =>
-                     r.StartDate <= endDate &&
-                     r.EndDate >= startDate
+                     (r.StartDate <= endDate &&
+                     r.EndDate >= startDate)
             ))
             .Select(x=> new GetAvailableVehiclesDto 
             {
