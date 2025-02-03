@@ -3,6 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../_modules/user';
 import { map } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class AccountService {
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
   currentUser = signal<User | null>(null);
+  private notificationService = inject(NotificationService)
   roles = computed(() =>{
     const user = this.currentUser();
     if(user && user.token){
@@ -24,8 +26,7 @@ export class AccountService {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       map(user => {
         if(user){
-          this.setCurrentUser(user);
-          
+          this.setCurrentUser(user);        
         }
       })
     );
@@ -45,11 +46,12 @@ export class AccountService {
   setCurrentUser(user: User){
     localStorage.setItem('user',JSON.stringify(user));
     this.currentUser.set(user);
+    this.notificationService.createHubConnection(user);
   }
 
   logout(){
     localStorage.removeItem('user');
     this.currentUser.set(null);
-
+    this.notificationService.stopHubConnection();
   }
 }

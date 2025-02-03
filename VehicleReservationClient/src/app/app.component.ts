@@ -13,7 +13,7 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
 })
 export class AppComponent implements OnInit {
   private accountService = inject(AccountService);
-  
+
   ngOnInit(): void {
     this.setCurrentUser();
   }
@@ -21,8 +21,6 @@ export class AppComponent implements OnInit {
     const userString = localStorage.getItem('user');
     if(!userString) return;
     const user = JSON.parse(userString);
-    //alert("I am an alert box!");
     this.accountService.setCurrentUser(user);
   }
-
 }

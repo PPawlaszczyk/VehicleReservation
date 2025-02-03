@@ -33,7 +33,5 @@ export class ConfirmService {
         else return false;
       })
     )
-
   }
-
 }

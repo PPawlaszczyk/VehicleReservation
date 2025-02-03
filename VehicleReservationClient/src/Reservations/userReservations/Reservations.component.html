@@ -1,1 +1,30 @@
-<h2 class="card-title mb-4">Your reservations:</h2>
+<div class="container mt-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title mb-4">Available Vehicles</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          @for(reservation of reservations; track reservation.id) {
+            <div class="col">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">Reservation from: {{ reservation.startDate }} To: {{ reservation.endDate }}</h5>
+                  <ul class="list-unstyled">
+                    <li><strong>Name:</strong> {{ reservation.vehicle.name }}</li>
+                    <li><strong>Registration number:</strong> {{ reservation.vehicle.registrationNumber }}</li>
+                    <li><strong>Mark:</strong> {{ reservation.vehicle.cost }}</li>
+                    <li><strong>Seats:</strong> {{ reservation.vehicle.seats }}</li>
+                    <li><strong>Fuel:</strong> {{ reservation.vehicle.fuel }}</li>
+                    <li><strong>Year:</strong> {{ reservation.vehicle.year }}</li>
+                    <li><strong>Cost:</strong> ${{ reservation.vehicle.cost }}</li>
+                  </ul>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                  <button class="btn btn-outline-primary w-100" (click)="returnReservation(reservation.id)">Return vehicle</button>
+                </div>
+              </div>
+            </div>
+          }        
+        </div>
+      </div>
+    </div>
+  </div>
