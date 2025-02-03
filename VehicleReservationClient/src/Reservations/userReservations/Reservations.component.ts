@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { map, Observable } from 'rxjs';
+import { map } from 'rxjs';
 import { UserReservationDto } from '../../app/_modules/UserReservationDto';
-import { CreateReservationDto } from '../../app/_modules/CreateReservationDto';
 import { ReturnReservedVehicleCommand } from '../../app/_modules/ReturnReservedVehicleCommand';
-import { VehicleType } from '../../app/_modules/enums';
 
 @Component({
   selector: 'app-test-errors',
@@ -18,7 +16,7 @@ import { VehicleType } from '../../app/_modules/enums';
 export class ReservationsComponent {
   baseUrl = environment.apiUrl;
   reservations: UserReservationDto[] = [];
-VehicleType: any;
+  VehicleType: any;
 
   constructor(private http: HttpClient) { }
 

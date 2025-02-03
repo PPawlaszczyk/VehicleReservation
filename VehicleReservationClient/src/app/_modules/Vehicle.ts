@@ -10,4 +10,3 @@ export interface Vehicle {
   year: number;
   cost: number;
 }
-
